@@ -37,5 +37,4 @@ async def invoke_llm(messages: List[Dict[str, str]], max_tokens: int = 4000) -> 
         
         data = response.json()
         
-        # ИСПРАВЛЕНО: Добавлен индекс [0], так как OpenAI возвращает список вариантов
         return data['choices'][0]['message']['content']
