@@ -5,6 +5,7 @@ from dotenv import load_dotenv
 
 # 1. Загружаем .env только если он есть (для локалки)
 load_dotenv()
+print(f"DEBUG: Ключ найден? {'Да' if os.environ.get('OPENAI_API_KEY') else 'Нет'}")
 
 # 2. Пытаемся взять ключ напрямую из системы
 OPENAI_API_KEY = os.environ.get('OPENAI_API_KEY')
