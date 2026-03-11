@@ -1,0 +1,52 @@
+name: Twitter Review Bot
+
+on:
+  workflow_dispatch:
+  schedule:
+    # Время в UTC (Moscow UTC+3):
+    # Пн 09:00 → 06:00 UTC
+    - cron: "0 6 * * 1"
+    # Вт 12:00 → 09:00 UTC
+    - cron: "0 9 * * 2"
+    # Ср 10:00 → 07:00 UTC
+    - cron: "0 7 * * 3"
+    # Чт 14:00 → 11:00 UTC
+    - cron: "0 11 * * 4"
+    # Пт 11:00 → 08:00 UTC
+    - cron: "0 8 * * 5"
+    # Вс 18:00 → 15:00 UTC
+    - cron: "0 15 * * 0"
+
+jobs:
+  run-twitter-bot:
+    runs-on: ubuntu-latest
+
+    env:
+      OPENAI_API_KEY: ${{ secrets.OPENAI_API_KEY }}
+      OPENAI_MODEL: gpt-4o
+
+      TWITTER_CONSUMER_KEY: ${{ secrets.TWITTER_CONSUMER_KEY }}
+      TWITTER_CONSUMER_SECRET: ${{ secrets.TWITTER_CONSUMER_SECRET }}
+      TWITTER_ACCESS_TOKEN: ${{ secrets.TWITTER_ACCESS_TOKEN }}
+      TWITTER_ACCESS_TOKEN_SECRET: ${{ secrets.TWITTER_ACCESS_TOKEN_SECRET }}
+      TWITTER_BEARER_TOKEN: ${{ secrets.TWITTER_BEARER_TOKEN }}
+
+    steps:
+      - name: Checkout repo
+        uses: actions/checkout@v4
+
+      - name: Set up Python
+        uses: actions/setup-python@v5
+        with:
+          python-version: "3.11"
+
+      - name: Install dependencies
+        working-directory: research
+        run: |
+          python -m pip install --upgrade pip
+          pip install -r requirements.txt
+
+      - name: Run Twitter content bot
+        working-directory: research
+        run: |
+          python twitter_bot.py
